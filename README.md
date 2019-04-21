@@ -3,12 +3,12 @@
 A simple password management tool that encrypts passwords with a master
 passphrase and stores them locally on disk.
 
-The password is copied to the clipboard by default.
+When retrieving a password it is copied to the clipboard by default rather than being displaying.
 
 ## Encryption
 The encryption used is AES256-GCM.
 
-Key derivation uses pbkdf2 with 1000 iterations.
+Key derivation uses PBKDF2 with 1000 iterations.
 
 ## Usage
 ```bash
@@ -28,7 +28,7 @@ Key derivation uses pbkdf2 with 1000 iterations.
   -session
         Run as non-exiting read only session
   -vault string
-        Specify path to the vault directory (default "/Users/turnerj/passvault")
+        Specify path to the vault directory (default "<home dir>/passvault")
 ```
 
 ### Adding Entries
@@ -36,15 +36,15 @@ Key derivation uses pbkdf2 with 1000 iterations.
 ./passvault -add
 ```
 You will first be prompted for a passphrase to generate the encryption key from.
-This can be the same for all entries.
+You can be the same for all entries if you wish.
 You will be prompted for a name for the entry. This name must be unique or
-the existing entry under that name will be overwritten.
+the **existing entry under that name will be overwritten**.
 
 ```
 Enter passphrase: 
-Enter name of secret entry: 
-Username: 
-Password: 
+Enter name of secret entry: foobar
+Username: johnsmith
+Password: blah
 Secret stored successfully
 ```
 
@@ -57,7 +57,7 @@ You will be prompted for the name of the secret to delete.
 To confirm the deletion you must enter the passphrase that was used to encrypt it.
 This must be the correct passphrase to decrypt the entry.
 ```
-Enter name of secret entry: 
+Enter name of secret entry: foobar
 Confirm deletion of secret entry test with passphrase
 Enter passphrase: 
 Entry test deleted successfully
@@ -72,9 +72,9 @@ You will b prompted for the passphrase and then the name of the entry.
 By defaut the password value is copied to the clipboard.
 ```
 Enter passphrase: 
-Enter name of secret entry: 
-Name: 
-Username: 
+Enter name of secret entry: foobar
+Name: foobar
+Username: johnsmith
 Password: ****
 Password copied to clipboard.
 ```
@@ -99,15 +99,15 @@ The passphrase is re-requested every 8 hours.
 ./passvault -session
 Enter passphrase: 
 ------
-Enter name of secret entry: test
-Name: test
-Username: jt
+Enter name of secret entry: foobar
+Name: foobar
+Username: johnsmith
 Password: ****
 Password copied to clipboard.
 ------
-Enter name of secret entry: test
-Name: test
-Username: jt
+Enter name of secret entry: foobar
+Name: foobar
+Username: johnsmith
 Password: ****
 Password copied to clipboard.
 ------
