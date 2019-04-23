@@ -129,5 +129,5 @@ The author accepts no liability for data lost as a result of using this tool.
 
 ## Build
 ```bash
-go build -o passvault github.com/jcmturner/passvault/cmd
+go build -o passvault github.com/jcmturner/passvault
 ```
