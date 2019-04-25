@@ -95,11 +95,12 @@ func main() {
 
 	if *sess {
 		for {
-			if time.Now().After(t.Add(time.Hour * 8)) {
-				passphrase = passwordPrompt()
-			}
 			fmt.Println("------")
 			*name = entryNamePrompt()
+			if time.Now().After(t.Add(time.Hour * 8)) {
+				passphrase = passwordPrompt()
+				t = time.Now()
+			}
 			err = get(*name, passphrase, cask, false, false)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Error getting entry: %v\n", err)
@@ -131,17 +132,24 @@ func main() {
 }
 
 func passwordPrompt() []byte {
-	fmt.Fprint(os.Stderr, "Enter passphrase: ")
-	p, _ := term.ReadPassword(int(syscall.Stdin))
-	fmt.Println("")
+	var p []byte
+	for len(p) < 1 {
+		fmt.Fprint(os.Stderr, "Enter passphrase: ")
+		p, _ = term.ReadPassword(int(syscall.Stdin))
+		fmt.Println("")
+	}
 	return p
 }
 
 func entryNamePrompt() string {
+	var n string
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Fprint(os.Stderr, "Enter name of secret entry: ")
-	n, _ := reader.ReadString('\n')
-	return strings.TrimSpace(n)
+	for n == "" {
+		fmt.Fprint(os.Stderr, "Enter name of secret entry: ")
+		n, _ = reader.ReadString('\n')
+		n = strings.TrimSpace(n)
+	}
+	return n
 }
 
 func newEntryDetails() (string, string) {
